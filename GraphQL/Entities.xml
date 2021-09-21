@@ -1,0 +1,10 @@
+﻿<Entities>
+  <Entity>
+    <Name>Platform</Name>
+    <NameDbContext>Platforms</NameDbContext>
+  </Entity>
+  <Entity>
+    <Name>Command</Name>
+    <NameDbContext>Commands</NameDbContext>
+  </Entity>
+</Entities>

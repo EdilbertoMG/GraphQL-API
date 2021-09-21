@@ -1,0 +1,51 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ Assembly Name = "System.Xml.dll" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Xml" #>
+<#@ output extension=".cs" #>
+
+//------------------------------------------------------------------
+//
+// Este es un archivo generado automáticamente no realice cambios manuales
+//
+//------------------------------------------------------------------
+
+using GraphQLAPI.Data;
+using GraphQLAPI.GraphQL.Types;
+using GraphQLAPI.Models;
+using HotChocolate;
+using HotChocolate.Data;
+using HotChocolate.Types;
+using System.Linq;
+
+namespace GraphQLAPI.GraphQL
+{
+	public class Query2
+	{
+	<# 
+	string xmlFileName = "Entities.xml";
+	string dir = System.IO.Path.GetDirectoryName(this.Host.TemplateFile);
+	string xmlPath = Path.Combine(dir, xmlFileName);
+	XmlDocument doc = new XmlDocument();
+	doc.Load(xmlPath);
+
+	foreach(XmlNode node in doc.ChildNodes[0].ChildNodes)
+	{
+		XmlNode cName = node.SelectSingleNode("Name");
+		XmlNode cNameDbContext = node.SelectSingleNode("NameDbContext");
+		#>
+
+		[UseDbContext(typeof(AppDbContext))]
+		[UseProjection]
+		[UseFiltering]
+		[UseSorting]
+		public IQueryable<<#= cName.InnerText #>> Get<#= cName.InnerText #>([ScopedService] AppDbContext context)
+		{
+			return context.<#= cNameDbContext.InnerText #>;
+		}
+	<#
+	}
+	#>
+		
+	}
+}
